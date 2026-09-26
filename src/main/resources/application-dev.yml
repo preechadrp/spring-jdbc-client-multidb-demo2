@@ -1,0 +1,45 @@
+#spring:
+  # รูปแบบปกติถ้าใช้ database อันเดียว
+  #
+  # จากการทดสอบใช้คู่กับแบบ multi-datasource ยุ่งยาก
+  # เพราะถ้ามีการสร้าง Bean JdbcClient/JdbcTemplate ตัวนั้นจะเป็น primary
+  # แทน default ของ Spring
+  #
+  # datasource:
+  #   url: jdbc:mariadb://localhost:3306/spring_jdbc_api_multidb_db1
+
+custom-config:
+  # primary db (ใช้พารามิเตอร์ Hikari โดยตรง)
+  # connectionTimeZone=Asia/Bangkok : ให้ driver แปลง Instant <-> DATETIME เป็นเวลา Bangkok
+  # forceConnectionTimeZoneToSession=false : ไม่ให้ driver set time_zone เอง (ใช้ connection-init-sql แทน)
+  datasource1:
+    pool-name: mydb-1
+    jdbc-url: jdbc:mariadb://localhost:3306/spring_jdbc_api_multidb_db1?connectionTimeZone=Asia/Bangkok&forceConnectionTimeZoneToSession=false
+    username: root
+    password: a1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    maximum-pool-size: 3
+    minimum-idle: 2
+    connection-timeout: 30000
+    # ให้ session ของ DB ใช้เวลา Bangkok (ใช้ offset เพราะไทยไม่มี DST และไม่ต้องโหลด tz table)
+    connection-init-sql: SET time_zone = '+07:00'
+
+  # test db2
+  datasource2:
+    pool-name: mydb-2
+    jdbc-url: jdbc:mariadb://localhost:3306/spring_jdbc_api_multidb_db2?connectionTimeZone=Asia/Bangkok&forceConnectionTimeZoneToSession=false
+    username: root
+    password: a1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    maximum-pool-size: 4
+    minimum-idle: 2
+    connection-timeout: 30000
+    # ให้ session ของ DB ใช้เวลา Bangkok (ใช้ offset เพราะไทยไม่มี DST และไม่ต้องโหลด tz table)
+    connection-init-sql: SET time_zone = '+07:00'
+
+  # ให้ Spring Boot รัน script ใน src/main/resources/
+  # schema.sql -> data.sql ตามลำดับ
+  #
+  # sql:
+  #   init:
+  #     mode: always
