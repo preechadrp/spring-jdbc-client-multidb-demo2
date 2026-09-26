@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: spring-jdbc-client-multidb-demo2
+  profiles:
+    active: dev
+  jackson:
+    # timezone ที่ใช้แสดงผลวันเวลาใน JSON
+    time-zone: Asia/Bangkok
+  threads:
+    virtual:
+        enabled: true
