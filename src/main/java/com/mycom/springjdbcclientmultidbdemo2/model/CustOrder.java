@@ -30,7 +30,7 @@ public class CustOrder {
 	private LocalDate orderDate;
 
 	// Instant = จุดเวลา (UTC) แสดงผล JSON เป็นเวลา Asia/Bangkok
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX", timezone = AppTimeZone.ZONE_ID_STR)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = AppTimeZone.ZONE_ID_STR)
 	private Instant insertDatetime;
 
 }
